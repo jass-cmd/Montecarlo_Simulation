@@ -1,0 +1,24 @@
+# Bytecode de Python
+__pycache__/
+*.py[cod]
+
+# Archivos compilados por Cython (como los que tenés en el screenshot)
+*.cpython-*.pyc
+*.so
+
+# Configuraciones de entorno/IDE
+.vscode/
+.idea/
+
+# Entornos virtuales (por si en el futuro usás uno)
+venv/
+.env/
+
+# Archivos del sistema (Windows/macOS)
+.DS_Store
+Thumbs.db
+
+# Datos temporales o resultados
+*.log
+*.tmp
+
