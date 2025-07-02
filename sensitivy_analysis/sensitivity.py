@@ -62,7 +62,6 @@ def run_simulation_with_params (config, runs=1000):
 
     return results
 
-
 def table_results (name, results):
 
     mean = np.mean(results)
