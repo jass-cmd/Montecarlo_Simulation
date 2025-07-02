@@ -1,8 +1,6 @@
 import sys # Agrega la carpeta raíz del proyecto al path
 import os
 import numpy as np 
-
-
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 sensitivity_configs = [ #Risks scenarios
@@ -49,6 +47,7 @@ from simulation.throughput_function import simulate_project_delivery
 
 
 def run_simulation_with_params (config, runs=1000):
+    
     results = []
 
     for _ in range (runs):
@@ -64,7 +63,24 @@ def run_simulation_with_params (config, runs=1000):
     return results
 
 
+def table_results (name, results):
+
+    mean = np.mean(results)
+    p50 = np.percentile(results, 50)
+    p85 = np.percentile(results, 85)
+    p95 = np.percentile(results, 95)
+
+    print (f"{name:<22} | Mean: {mean:5.2f} | P50: {int(p50):2d} | P85: {int(p85):2d} | P95: {int(p95):2d}")
+
+
 if __name__ == "__main__":
-    data = run_simulation_with_params(sensitivity_configs[0])
-    print(f"Primeras 10 simulaciones: {data[:10]}")
-    print(f"Promedio: {np.mean(data):.2f} semanas")
+    
+    print("Sensitivity Analysis Results:\n")
+    print(f"{'Scenario':<22} | {'Mean':>5} | P50 | P85 | P95")
+    print("-" * 50)
+
+    for config in sensitivity_configs:
+
+        data = run_simulation_with_params(config, runs=1000)
+        table_results(config["name"], data)
+

@@ -43,7 +43,7 @@ def simulate_project_delivery(
     """
 
     if risks is None:
-        risks = [
+        risks = [                            #values by default
             {"prob": 0.05, "impact": 0.90},  # team vacation
             {"prob": 0.10, "impact": 0.80},  # client dependency
             {"prob": 0.20, "impact": 1.30},  # exceptional performance
@@ -55,7 +55,7 @@ def simulate_project_delivery(
     while delivered < ticket_goal:
         base_th = triangular_th_generator(min_val, mode, max_val)
         multiplier = get_capacity_multiplier(risks)
-        adjusted_th = max(1, round(base_th * multiplier))  # garantiza mínimo de 1
+        adjusted_th = max(1, round(base_th * multiplier))  # th min = 1
         delivered += adjusted_th
         weeks += 1
 
