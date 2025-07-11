@@ -29,6 +29,11 @@ class TestRisk (unittest.TestCase): #esta clase hereda de unittest.testcase los 
             Risk("test5", 23, 9)
 
 
+    def test_to_dict(self):
+        risk = Risk("Risk Name", 0.8, 0.7)
+        expected = {"name":"Risk Name", "probability":0.8, "impact":0.7}
+        self.assertEqual (risk.to_dict(), expected)
+
 
 if __name__ == '__main__':
     unittest.main()
