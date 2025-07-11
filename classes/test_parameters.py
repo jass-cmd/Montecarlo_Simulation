@@ -35,11 +35,13 @@ class TestsParameters(unittest.TestCase):
                         case["num_sim"]
                         
                     )
-                
 
+    def test_from_dict(self):
 
-
-
+        data = {"backlog": 0, "th_min": 3, "th_ex": 5, "th_max": 9, "num_sim": 1000}
+        with self.assertRaises(ValueError):    
+            SimulationParameters.from_dict(data)
+           
 
 
 if __name__ == '__main__':
