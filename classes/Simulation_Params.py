@@ -13,7 +13,7 @@ class SimulationParameters:
     @staticmethod
     def _data_validation(backlog:int, th_min:int, th_ex:int, th_max:int, num_sim:int):
                         
-                tempdict = {
+                tempdict = { #temporary dict to validate data
 
                     "backlog":backlog,
                     "th_min":th_min,
