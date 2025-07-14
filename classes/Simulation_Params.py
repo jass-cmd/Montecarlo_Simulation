@@ -1,5 +1,11 @@
 class SimulationParameters: 
 
+    """
+    This class's purpose is to validate the simulation parameters data placed by the users
+    The goal is to create a final object fully validated and ready to be used by the simulator
+    or other parts of the system.
+    
+    """
     def __init__(self, backlog:int, th_min:int, th_ex:int, th_max:int, num_sim:int):
 
                 SimulationParameters._data_validation (backlog, th_min, th_ex, th_max, num_sim)
