@@ -1,5 +1,10 @@
 class Risk: 
-
+    """
+    This class's purpose is to captura and validate
+    the risks inputs added by the user.
+    It makes sure they're fully validated before creating the obj.
+    
+    """
     def __init__(self, risk_name: str, probability: float, impact: float):
 
         Risk._data_validation(risk_name, probability, impact)
@@ -10,6 +15,12 @@ class Risk:
 
     @staticmethod
     def _data_validation(risk_name, probability, impact):
+
+        """
+        Validates the data before creating the obj.
+        The ultima goal is for the object to created after
+        being fully validated.
+        """
 
         if risk_name is None or not isinstance(risk_name, str) or not risk_name.strip(): 
                 raise TypeError("This field must be a string and must not be empty")
@@ -23,6 +34,12 @@ class Risk:
             
     @staticmethod
     def from_dict(data: dict):
+
+        """
+        The users input (JSON file) gets converted into a dict 
+        via the API and this method creates an object from that dict.
+
+        """
 
         dict_keys = ["risk_name","probability","impact"]
         for keys in  dict_keys:
@@ -44,7 +61,12 @@ class Risk:
         )
     
     def to_dict(self):
-         
+         """
+         Converts the obj into a dict. This is for future serialization,
+         conversion to JSON, storage in database, data analysis, statistical analysis
+         and frontend communication.
+
+         """
          return {
               "risk_name":self.risk_name,
               "probability":self.probability,
@@ -53,6 +75,12 @@ class Risk:
     
     @staticmethod
     def parse(data):
+         """
+         This method parses the user's input from an or list of objetcs
+         into an object or a list of them. That will then be used as parameters 
+         in the simulatior class.
+         
+         """
          
          if isinstance(data, dict):
               return [Risk.from_dict(data)]
