@@ -23,7 +23,7 @@ class Risk:
         for key, value in parameters.items():
             if not (0 < value < 1):
                 raise ValueError (f"The field {key} has to be a value between 0 and 1 (eg. 0.4 --> 40%)")
-
+        
 
     def to_dict(self): 
         return {
@@ -46,7 +46,33 @@ class Risk:
        except KeyError as e:
               raise ValueError (f"The field {e.args[0]} is missing the input data")
     
+    def parse (data): 
+        """
+        This method parses a dictionary or a list of them into a object or
+        list of objects. After validating structure and content.
+        
+        """
+        if isinstance(data, dict): 
+            return [Risk.from_dict(data)]
+        
+        elif isinstance(data, list):
+           
+            risks = []
+            for i, item in enumerate(data):
+                if not isinstance(item, dict):
+                    raise TypeError (f"Error at index {i}. This is not a dictionary")
                 
+                try:
+                    obj = Risk.from_dict(item)
+                    risks.append(obj)
+                except ValueError as e:
+                    raise ValueError (f"Error at index {i}. {e}")
+                
+            return risks
+        else:
+            raise TypeError ("Input must be a dictionary or a list of dictionaries.")
+    
+        
     def __str__(self):
         return f"Risk (risk_name={self.risk_name}, probability={self.probability}, impact={self.impact})"
     
