@@ -48,7 +48,8 @@ class Risk:
     
     def parse (data): 
         """
-        This method parses a dictionary or a list of them into a object or
+        The user can enter one or more risks,
+        this method parses a dictionary or a list of them into a object or
         list of objects. After validating structure and content.
         
         """
