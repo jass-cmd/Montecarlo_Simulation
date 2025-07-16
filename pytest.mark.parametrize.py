@@ -10,12 +10,12 @@
 #     result = my_function(param1, param2)
 #     assert result == expected
 
-# for clases 
-
-# @pytest.mark.parametrize("campo, valor", [
+# for clases `@pytest.mark.parametrize("campo, valor",[
 #     ("backlog", "string"),
 #     ("th_min", -1),
-# ])
+# ])`
+
+# 
 # def test_input_invalido_para_clase(campo, valor):
 #     params = {
 #         "backlog": 100,

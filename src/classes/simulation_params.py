@@ -41,7 +41,7 @@ class SimulationParameters:
             raise ValueError("Throughput must follow th_min < th_ex < th_max")
          
     @staticmethod
-    def from_dict(data:dict): 
+    def from_dict(data:dict):
         """
         This method takes a dict (user's input) and
         converts them into a obj after calling the constructor
@@ -69,6 +69,7 @@ class SimulationParameters:
         
         """
         return {
+            
             "backlog":self.backlog,
             "th_min":self.th_min,
             "th_ex":self.th_ex,
