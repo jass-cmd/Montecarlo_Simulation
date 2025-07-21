@@ -4,73 +4,59 @@ from risk_class import Risk
 
 class Simulator:
     """
-    Vectorized Monte Carlo simulation of project delivery time based on throughput(obj) and risks(obj).
+    Monte Carlo simulation of project delivery time based on throughput(obj) and risks(obj).
     """
     def __init__(self, parameters:SimulationParameters, risks: list[Risk]):
         
-            self.parameters = parameters
-            self.risks = risks
-            self.results = None # this will be np.ndarray with simulation durations
+           self.parameters = parameters
+           self.risks = risks
+           self.results = None 
 
     """
-    Metodo constructor de la clase, guarda el estado inicial del objeto.
-    Crea los atributos que va a guardar los riesgos y parametros
-    ingresados por el usuario. Es importante saber que estos atributos 
-    quedan disponible para usar desde cualquier parte del codigo del objeto.
-    El atributo self.results va a guardar los resultados luego de ejecutar la simulacion.
-    Se deja como none para que si el usuario intenta obtener los resultados sin haber hecho
-    la simulacion le dara error. Ademas, esto es extensible. Si el dia de manana quiero
+    Saves the initial state of the object.
+    Creates the atributes of the obj (parameters andn risks)
+    Self results will save the results of the simulation. 
+    This will later be used for data visualization, convergence and sensibility analysis.
 
     """
     def run_simulation(self, max_weeks: int = 200):
 
+        """
+        Unpack the values that will be used in the simulation
+        """
         backlog = self.parameters.backlog
         num_sim = self.parameters.num_sim
         th_min = self.parameters.th_min
         th_ex = self.parameters.th_ex
         th_max = self.parameters.th_max
 
-        """
-        Primero defino todas los parametros que voy a usar en la simulacion.
         
         """
+        Run the simulation to get a matrix of throughput values not adjusted by risks.
+        It's already and ndarray so vectorizaed operations can be used.
+        """
         base_throughput = np.random.triangular(
-       
+            
             left=th_min,
             mode=th_ex,
             right=th_max,
             size=(num_sim, max_weeks)
-        )
-
-        """
-        Genero la matriz del throughput base siguiendo una distribucion triangular
-        Esto genera una matriz como la que cree en google sheets. Ya es un ndarray
-        """
-        # 2. Aplicar riesgos de forma vectorizada
+            
+            )
+        
+        #Apply risks to the whole ndarray of throughput values
         adjusted_throughput = self._apply_risks_vectorized(base_throughput)
 
-        # 3. Acumulamos throughput por simulación a lo largo de las semanas
+        #Get the cumulative throughput per row (axis = 1)
         cumulative_throughput = np.cumsum(adjusted_throughput, axis=1)
 
-        # 4. Detectamos en qué semana se alcanza el backlog por simulación
-        reached = cumulative_throughput >= backlog
-        first_success = np.argmax(reached, axis=1) + 1  # +1 porque argmax da el índice 0-based
-        """
-        reached = cumulative_throughput >= backlog 
-         
-        Aplica broadcasting siguiendo ese operador >= y devuelve un ndarray de booleanos
-        donde se puede ver que celdas superaron el backlog (true) o lo igualaron (true) y cuales no(false).
-
-        first_success = np.argmax(reached, axis=1) 
-
-        Una vez que tengo ese ndarray de booleanos, busco la primera ocurrencia de true con np argmx.
-        np.argmax busca la primera ocurrencia del mayor valor y lo hace a lo largo de las filas porque 
-        lo indico con axis= 1. En este caso la mayor ocurrencia es true ya que true = 1 y false = 0.
-        Devuelve un array de tamaño num_sim con el indice de columna.
-
-        """
+        #Creates a boolean matrix (mask) to identify the when the simulation hit the target backlog for the first time
+        reached = cumulative_throughput >= backlog #it uses broadcasting to apply the operator to the whole matrix
+        first_success = np.argmax(reached, axis=1) + 1  # +1 because of 0-based index
+        
 
         self.results = first_success
+        return self.results
 
     def _apply_risks_vectorized(self, throughput: np.ndarray) -> np.ndarray:
         """
@@ -79,15 +65,18 @@ class Simulator:
         adjusted = throughput.copy()
 
         for risk in self.risks:
-            # Matriz booleana: True donde el riesgo ocurre
+            #createas a boolean matrix (mask) to determine when the risk occurs
             risk_occurs = np.random.rand(*throughput.shape) < risk.probability
 
-            # Aplicar impacto del riesgo
+            #apply risks to base throughput through the mask for everr risk added by the user (warning: it accumulates risks)
             adjusted = np.where(risk_occurs, adjusted * risk.impact, adjusted)
 
         return adjusted
 
     def get_results(self) -> np.ndarray:
+
+        #just for safety, it requires the simulation to run before getting the results.
         if self.results is None:
             raise RuntimeError("Simulation has not been run yet.")
         return self.results
+    
