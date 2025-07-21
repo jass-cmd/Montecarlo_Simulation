@@ -1,7 +1,7 @@
 class SimulationParameters: 
     """
     This class captures the simulation parameters.
-    Validates them and make sure the object is create after
+    Validates them and make sure the object is created after
     bien fully validated
     """
     def __init__(self, backlog:int, th_min:int, th_ex:int, th_max:int, num_sim:int):
