@@ -2,7 +2,7 @@ class SimulationParameters:
     """
     This class captures the simulation parameters.
     Validates them and make sure the object is created after
-    bien fully validated
+    being fully validated
     """
     def __init__(self, backlog:int, th_min:int, th_ex:int, th_max:int, num_sim:int):
         
@@ -17,7 +17,7 @@ class SimulationParameters:
     @staticmethod
     def _data_validation(backlog, th_min, th_ex, th_max, num_sim):
         """
-        This method is in charge of validating the inputs user.
+        This method is in charge of validating the user's input.
         More specifcally it's content.
 
         """
@@ -49,9 +49,9 @@ class SimulationParameters:
         """
         keys = ["backlog", "th_min", "th_ex", "th_max", "num_sim"]
 
-        for x in keys:
-            if x not in data:
-                raise ValueError(f"Field {x} is missing")
+        for key in keys:
+            if key not in data:
+                raise ValueError(f"Field {key} is missing")
         
         return SimulationParameters (
 
