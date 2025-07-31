@@ -82,10 +82,10 @@ class Risk:
          
          """
          
-         if isinstance(data, dict):
+         if isinstance(data, dict): #the user entered just one risk
               return [Risk.from_dict(data)]
         
-         elif isinstance(data, list):
+         elif isinstance(data, list): #the user entered multiple risks
             risks = []
             for i, item in enumerate(data):
                  if not isinstance(item, dict):

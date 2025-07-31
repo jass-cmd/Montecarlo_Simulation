@@ -9,12 +9,11 @@ class SimulationVisualizer:
     Generates all the visualizations from simulation results
     and returns them as base64-encoded images ready to be sent to the frontend by an API.
     """
-
-    def __init__(self, results:np.ndarray):
-
+    
+    def __init__(self, results: np.ndarray):
         """
         Creates an object that has the array results as the main attribute
-        not before validaing its structure and data type.
+        not before validating its structure and data type.
         """
         if not isinstance(results, np.ndarray):
             raise ValueError("Results must be a NumPy array.")
@@ -22,32 +21,51 @@ class SimulationVisualizer:
             raise ValueError("Results must be a 1-dimensional array.")
         if results.size < 2:
             raise ValueError("Results array must contain at least two values.")
+       
         self.results = results
 
+    def _render_plot_to_base64(self) -> str:
+        """
+        This method converts the plots into base 64 strings that can be sent to the frontend
+        by fast API. This is to not depend on the file management system.
+        """
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format="png", bbox_inches="tight")
+        plt.close()
+        buffer.seek(0)
+        img_bytes = buffer.read()
+        img_base64 = base64.b64encode(img_bytes).decode("utf-8")
+        return img_base64
 
-    def _render_plot_to_base64(self):
-
-         buffer = io.BytesIO() #creates a temporal file in memory
-         
-
-
-    def plot_histogram(self, bins: int = 30) -> str:
+    def _plot_histogram(self, bins: int = 30, show: bool = True) -> str:
+        """
+        This method creates a histogram with percentiles that
+        will be converted into base64 string
+        """
         plt.figure(figsize=(10, 6))
         plt.hist(self.results, bins=bins, edgecolor='black', alpha=0.75)
-        plt.title("Histogram of Completion Time")
+        plt.title("Completion Time")
         plt.xlabel("Weeks to Completion")
         plt.ylabel("Frequency")
 
         for p, color in zip([50, 85, 95], ['blue', 'green', 'red']):
             val = np.percentile(self.results, p)
             plt.axvline(val, color=color, linestyle='--', label=f'P{p}: {val:.1f} weeks')
+
         plt.legend()
 
-        return self._render_plot_to_base64()
+        if show:
+            plt.show()
+            return ""
+        else:
+            return self._render_plot_to_base64()
 
     def plot_cdf(self) -> str:
+        """
+        This creates the CDF plot.
+        """
         sorted_vals = np.sort(self.results)
-        probs = np.linspace(0, 1, len(sorted_vals), endpoint=False)
+        probs = np.linspace(0, 1, len(sorted_vals), endpoint=True)
 
         plt.figure(figsize=(10, 6))
         plt.plot(sorted_vals, probs, drawstyle='steps-post')
@@ -58,8 +76,9 @@ class SimulationVisualizer:
         for p, color in zip([50, 85, 95], ['blue', 'green', 'red']):
             val = np.percentile(self.results, p)
             plt.axvline(val, color=color, linestyle='--', label=f'P{p}: {val:.1f} weeks')
-        plt.legend()
 
+        plt.legend()
+        plt.show()#for local use only
         return self._render_plot_to_base64()
 
     def plot_boxplot(self) -> str:
@@ -67,7 +86,7 @@ class SimulationVisualizer:
         plt.boxplot(self.results, vert=False)
         plt.title("Boxplot of Completion Time")
         plt.xlabel("Weeks to Completion")
-
+        plt.show()#for local use only
         return self._render_plot_to_base64()
 
     def plot_convergence(self, step: int = 500) -> str:
@@ -92,5 +111,5 @@ class SimulationVisualizer:
         plt.title("Convergence of P85 Estimate")
         plt.xlabel("Number of Simulations")
         plt.ylabel("P85 Completion Time (weeks)")
-
+        plt.show() #for local use only
         return self._render_plot_to_base64()
