@@ -51,7 +51,7 @@ class Simulator:
         """
         adjusted = th_base_matrix.copy()
         for risk in self.risks:
-            risk_mask = np.random.rand(*th_base_matrix.shape) < risk.probability
+            risk_mask = np.random.rand(*th_base_matrix.shape) < risk.probability #creates a mask where true = rand < risk.probability
             adjusted = np.where(risk_mask, adjusted * risk.impact, adjusted) #apply risks using the mask as filter
         return adjusted
 
