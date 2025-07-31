@@ -21,7 +21,7 @@ class Simulator:
 
         """
         Takes the user input parameters and run the simulation to get the throughput base.
-        No risks applied for now. The output is an ndarray of throughput values.
+        After that it applies risks.
         """
         backlog = self.parameters.backlog
         th_min = self.parameters.th_min
@@ -39,7 +39,7 @@ class Simulator:
         th_adjusted = self._apply_risks(th_base) #apply risks
         th_accumulated = np.cumsum(th_adjusted, axis=1) #acumulates the throughput along the rows.
         th_reached = th_accumulated >= backlog #creates a boolean ndarray (mask)
-        self.results = np.argmax(th_reached, axis=1) + 1 #finds the week where th_accumulated = backlog
+        self.results = np.argmax(th_reached, axis=1) + 1 #finds the column where th_accumulated = backlog
 
         return self.results
 
