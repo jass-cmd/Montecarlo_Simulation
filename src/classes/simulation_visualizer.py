@@ -81,14 +81,7 @@ class SimulationVisualizer:
         plt.show()#for local use only
         return self._render_plot_to_base64()
 
-    def plot_boxplot(self) -> str:
-        plt.figure(figsize=(8, 6))
-        plt.boxplot(self.results, vert=False)
-        plt.title("Boxplot of Completion Time")
-        plt.xlabel("Weeks to Completion")
-        plt.show()#for local use only
-        return self._render_plot_to_base64()
-
+    
     def plot_convergence(self, step: int = 500) -> str:
         if step < 1:
             raise ValueError("Step must be a positive integer.")
