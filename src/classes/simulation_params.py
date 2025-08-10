@@ -4,7 +4,7 @@ class SimulationParameters:
     Validates them and make sure the object is created after
     being fully validated
     """
-    def __init__(self, backlog:int, th_min:int, th_ex:int, th_max:int, num_sim:int):
+    def __init__(self, backlog:int, th_min:int, th_ex:int, th_max:int, num_sim:int=1000):
         
         SimulationParameters._data_validation(backlog, th_min, th_ex, th_max, num_sim)
 
