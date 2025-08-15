@@ -11,7 +11,7 @@ risk_obj = [Risk("Dependencies", 0.3, 0.7)]
 results_distribution = Simulator(parameters_obj, risk_obj)
 results_distribution.run_simulation()
 viz = SimulationVisualizer(results_distribution.results)
-viz._plot_cdf()
+viz.plot_cdf()
 #viz._plot_histogram(30)
 #viz.plot_convergence(100)
 # viz.plot_boxplot()
