@@ -58,11 +58,16 @@ def simulate(req: RunRequest) -> RunResponse:
 
         viz = SimulationVisualizer(results)
         hist_b64 = viz._plot_histogram() 
-        CFD = viz.plot_cdf()
+        cfd_b64  = viz.plot_cdf()
+        convergence_b64 = viz.plot_convergence()
 
         return RunResponse(
-            results=results.tolist(),
-            images=[ImageDTO(kind="histogram", image_base64=hist_b64)],
+        
+            images=[
+                ImageDTO(kind="histogram", image_base64=hist_b64),
+                ImageDTO(kind="cdf", image_base64=cfd_b64),
+                ImageDTO(kind="convergence", image_base64=convergence_b64)
+            ]
         )
 
     except ValueError as e:

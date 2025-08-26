@@ -79,8 +79,7 @@ class ImageDTO(BaseModel):
 
 class RunResponse(BaseModel):
     
-    results: list[float] = Field(..., description="weeks to complete per iteration.")
-    images: list[ImageDTO] = Field(default_factory=list, description="by default it only shows the histogram.")
+    images: list[ImageDTO] = Field(default_factory=list)
 
     model_config = ConfigDict(json_schema_extra={
         "example": {
@@ -93,8 +92,7 @@ class RunResponse(BaseModel):
 class VisualizeResponse(BaseModel):
     images: list[ImageDTO]
 
-
-# Error contract (uniforme)
+# Error contract
 
 class ErrorResponse(BaseModel):
     error: Literal["validation_error", "bad_request", "server_error"]
