@@ -1,6 +1,6 @@
 import numpy as np
-from simulation_params import SimulationParameters
-from risk_class import Risk
+from .simulation_params import SimulationParameters
+from .risk_class import Risk
 
 class Simulator:
 

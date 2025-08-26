@@ -37,7 +37,7 @@ class SimulationVisualizer:
         img_base64 = base64.b64encode(img_bytes).decode("utf-8")
         return img_base64
 
-    def _plot_histogram(self, bins: int = 30, show: bool = True) -> str:
+    def _plot_histogram(self, bins: int = 30, show: bool = False) -> str:
         """
         This method creates a histogram with percentiles that
         will be converted into base64 string

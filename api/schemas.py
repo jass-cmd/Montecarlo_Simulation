@@ -23,10 +23,10 @@ class RiskDTO(BaseModel):
 class ParamsDTO(BaseModel):
 
     """Simulation params"""
-
-    t_min: float = Field(..., gt=0)
-    t_mode: float = Field(..., gt=0)
-    t_max: float = Field(..., gt=0)
+    backlog: int = Field(..., gt=0)
+    t_min: int = Field(..., gt=0)
+    t_mode: int = Field(..., gt=0)
+    t_max: int = Field(..., gt=0)
     iterations: int = Field(2000, ge=1000, description="number of iterations must be (>= 1000).")
 
     @model_validator(mode="after")
